@@ -87,4 +87,31 @@ Al acceder a https://django.devops-alumno08.com/sentry-debug/ nos genera un erro
  
 > Pregunta 3 : Pon la instalación de wordpress que estamos usando estos días en sentry.
 
+Instalamos composer:
+```
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+sudo mv composer.phar /usr/local/bin/composer
+```
+Mediante composer podemos instalar sentry:
+```
+composer require sentry/sdk
+```
+Insertamos en *wp-config.php* del proyecto (al final) las siguientes líneas:
+```
+if ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
+    require __DIR__ . '/vendor/autoload.php';
+}
+Sentry\init(['dsn' => 'https://8750e0a930814f3688c9f62bd108aa3b@o922130.ingest.sentry.io/5869751' ]);
+```
+Y lanzamos el error:
+```
+throw new Exception("Primera prueba de sentry en wordpress!");
+```
+![image](https://user-images.githubusercontent.com/65896169/126063308-09bcbce8-1979-4780-886f-ee7884c2a0b0.png)
+
 > Pregunta 4 : Haz lo mismo con rollbar.
+
+
