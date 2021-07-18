@@ -104,7 +104,7 @@ Insertamos en *wp-config.php* del proyecto (al final) las siguientes líneas:
 if ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
     require __DIR__ . '/vendor/autoload.php';
 }
-Sentry\init(['dsn' => 'https://8750e0a930814f3688c9f62bd108aa3b@o922130.ingest.sentry.io/5869751' ]);
+Sentry\init(['dsn' => 'https://***********************.ingest.sentry.io/5869751' ]);
 ```
 Y lanzamos el error:
 ```
@@ -113,5 +113,32 @@ throw new Exception("Primera prueba de sentry en wordpress!");
 ![image](https://user-images.githubusercontent.com/65896169/126063308-09bcbce8-1979-4780-886f-ee7884c2a0b0.png)
 
 > Pregunta 4 : Haz lo mismo con rollbar.
+
+Instalamos con composer en el proyecto:
+```
+composer require rollbar/rollbar:~1.5
+```
+Y sustituimos lo que hemos puesto en wp-config para sentry por lo de rollbar:
+```
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
+Rollbar::init(
+    array(
+        'access_token' => '************************',
+        'environment' => 'production'
+    )
+);
+```
+Y lanzamos un error de prueba:
+```
+Rollbar::log(Level::info(), 'Primera prueba de rollbar en wordpress');
+throw new Exception('Fallo lanzado a proposito para testing');
+```
+Y aquí tenemos el resultado de ambas pruebas:
+![image](https://user-images.githubusercontent.com/65896169/126063584-04915218-2bdc-4c05-b9eb-6e6e975ede60.png)
+![image](https://user-images.githubusercontent.com/65896169/126063590-d8b2024f-e182-4758-977d-e3373b8e36bc.png)
+
+
+
 
 
